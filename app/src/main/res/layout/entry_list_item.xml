@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="entry"
+            type="com.harshabhadra.testapp.network.Entry" />
+    </data>
+
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:viewBindingIgnore="true">
+
+        <TextView
+            android:id="@+id/api_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@{entry.api}"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="Sample Text" />
+
+        <TextView
+            android:id="@+id/des_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@{entry.description}"
+            tools:text="Sample Text" />
+
+        <TextView
+            android:id="@+id/auth_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@{entry.auth}"
+            tools:text="Sample Text" />
+
+        <TextView
+            android:id="@+id/cors_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@{entry.cors}"
+            tools:text="Sample Text" />
+
+        <TextView
+            android:id="@+id/link_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@{entry.link}"
+            tools:text="Sample Text" />
+
+        <TextView
+            android:id="@+id/category_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@{entry.category}"
+            tools:text="Sample Text" />
+    </LinearLayout>
+</layout>
