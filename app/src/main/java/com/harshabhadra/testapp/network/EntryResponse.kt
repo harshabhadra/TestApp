@@ -3,6 +3,7 @@ package com.harshabhadra.testapp.network
 import com.google.gson.annotations.Expose
 
 import com.google.gson.annotations.SerializedName
+import com.harshabhadra.testapp.database.DbEntry
 
 data class EntryResponse(
     @SerializedName("count")
@@ -36,3 +37,17 @@ data class Entry(
     @Expose
     var category: String
 )
+
+fun List<Entry>.asDbEntries(): List<DbEntry> {
+    return map {
+        DbEntry(
+            api = it.api,
+            description = it.description,
+            auth = it.auth,
+            https = it.https,
+            cors = it.cors,
+            link = it.link,
+            category = it.category
+        )
+    }
+}

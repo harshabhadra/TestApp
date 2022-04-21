@@ -7,11 +7,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.harshabhadra.testapp.database.EntryDatabase
 import com.harshabhadra.testapp.network.ApiService
 
 class ViewModelFactory(
     context: SavedStateRegistryOwner,
-    private val apiService: ApiService? = null,
+    private val repository: Repository
 ) :
     AbstractSavedStateViewModelFactory(context, null) {
     override fun <T : ViewModel?> create(
@@ -20,7 +21,7 @@ class ViewModelFactory(
         handle: SavedStateHandle
     ): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel(apiService!!) as T
+            return MainViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

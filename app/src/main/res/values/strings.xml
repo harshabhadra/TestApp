@@ -3,4 +3,5 @@
     <string name="go_to_next_screen">Go To next screen</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    <string name="no_items_found">NO Items Found</string>
 </resources>

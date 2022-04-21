@@ -11,5 +11,7 @@ task clean(type: Delete) {
 
 ext{
     retrofitVersion = '2.9.0'
-    lifecycle_version = '2.4.0'
+    lifecycle_version = '2.4.1'
+    room_version = '2.3.0'
+    paging_version = '3.0.0'
 }

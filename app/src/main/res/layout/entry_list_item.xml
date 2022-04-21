@@ -6,7 +6,7 @@
 
         <variable
             name="entry"
-            type="com.harshabhadra.testapp.network.Entry" />
+            type="com.harshabhadra.testapp.database.DbEntry" />
     </data>
 
     <LinearLayout
@@ -21,8 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="@{entry.api}"
             android:textSize="16sp"
+            android:text="@{entry.api}"
             android:textStyle="bold"
             tools:text="Sample Text" />
 

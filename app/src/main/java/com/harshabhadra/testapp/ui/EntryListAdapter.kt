@@ -2,19 +2,21 @@ package com.harshabhadra.testapp.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.harshabhadra.testapp.database.DbEntry
 import com.harshabhadra.testapp.databinding.EntryListItemBinding
 import com.harshabhadra.testapp.network.Entry
 
 class EntryListAdapter :
-    ListAdapter<Entry, EntryListAdapter.EntryListViewHolder>(EntryListDiffUtilCallBack()) {
+    PagingDataAdapter<DbEntry, EntryListAdapter.EntryListViewHolder>(EntryListDiffUtilCallBack()) {
 
     class EntryListViewHolder(private val binding: EntryListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(entry: Entry) {
+        fun bind(entry: DbEntry) {
             binding.entry = entry
             binding.executePendingBindings()
         }
@@ -40,12 +42,12 @@ class EntryListAdapter :
     }
 }
 
-class EntryListDiffUtilCallBack : DiffUtil.ItemCallback<Entry>() {
-    override fun areItemsTheSame(oldItem: Entry, newItem: Entry): Boolean {
+class EntryListDiffUtilCallBack : DiffUtil.ItemCallback<DbEntry>() {
+    override fun areItemsTheSame(oldItem: DbEntry, newItem: DbEntry): Boolean {
         return oldItem === newItem
     }
 
-    override fun areContentsTheSame(oldItem: Entry, newItem: Entry): Boolean {
+    override fun areContentsTheSame(oldItem: DbEntry, newItem: DbEntry): Boolean {
         return oldItem.api == newItem.api
     }
 

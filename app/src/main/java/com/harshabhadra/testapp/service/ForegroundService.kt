@@ -56,8 +56,6 @@ class ForegroundService : Service() {
                 super.onLocationResult(locationResult)
                 currentLocation = locationResult.lastLocation
                 Log.e(TAG, "location update: ${currentLocation?.latitude}")
-
-                // Notify our Activity that a new location was added.
                 notifyActivity(currentLocation)
             }
         }
@@ -187,8 +185,7 @@ class ForegroundService : Service() {
         }
         val cancelPendingIntent =
             PendingIntent.getService(this, 0, cancelIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-        // 4. Build and issue the notification.
-        // Notification Channel Id is ignored for Android pre O (26).
+
         val notificationCompatBuilder =
             NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
 

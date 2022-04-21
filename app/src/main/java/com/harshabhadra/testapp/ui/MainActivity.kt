@@ -6,13 +6,20 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.harshabhadra.testapp.Loading
 import com.harshabhadra.testapp.MainViewModel
-import com.harshabhadra.testapp.Result
+import com.harshabhadra.testapp.Repository
 import com.harshabhadra.testapp.ViewModelFactory
 import com.harshabhadra.testapp.common.BaseActivity
+import com.harshabhadra.testapp.database.EntryDatabase
 import com.harshabhadra.testapp.databinding.ActivityMainBinding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 
 
 class MainActivity : BaseActivity() {
@@ -29,10 +36,11 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val viewModelFactory = ViewModelFactory(this, apiService)
-        viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java].apply {
-            getEntries()
-        }
+
+        val database = EntryDatabase.getDatabase(this)
+        val viewModelFactory =
+            ViewModelFactory(this, Repository(apiService, database))
+        viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
 
         //Adding divider to recyclerView
         val dividerItemDecoration = DividerItemDecoration(
@@ -41,40 +49,45 @@ class MainActivity : BaseActivity() {
         )
         binding.entryRecyclerView.addItemDecoration(dividerItemDecoration)
 
-        //Setting up adapter
-        entryListAdapter = EntryListAdapter()
-        binding.entryRecyclerView.adapter = entryListAdapter
-
+        setupAdapter()
         registerObservers()
+        initEntry()
+
         binding.fab.setOnClickListener {
             startActivity(Intent(this, LocationActivity::class.java))
         }
     }
 
-    private fun registerObservers() {
-        viewModel.entriesLiveData.observe(this) {
-            it?.let {
-                when (it) {
-                    is Result.Success -> {
-                        Log.e(TAG, "no. of entries: ${it.entries.size}")
-                        if (it.entries.isNotEmpty()) entryListAdapter.submitList(it.entries)
-                    }
-                    else -> {
-                        showErrorDialog()
-                    }
-                }
-
-            }
+    private fun setupAdapter() {
+        //Setting up adapter
+        entryListAdapter = EntryListAdapter()
+        binding.entryRecyclerView.adapter = entryListAdapter
+        entryListAdapter.addLoadStateListener { loadState ->
+            val isEmptyList =
+                loadState.refresh is LoadState.NotLoading && entryListAdapter.itemCount == 0
+            binding.emptyTextView.isVisible = isEmptyList
+            binding.loading.isVisible = loadState.refresh is LoadState.Loading
         }
+    }
 
-        viewModel.loadingLiveData.observe(this) {
-            it?.let {
-                binding.loading.isVisible = it == Loading.LOADING
+    private fun registerObservers() {
+        lifecycleScope.launch {
+            viewModel.getEntries().collectLatest {
+                entryListAdapter.submitData(it)
             }
         }
     }
 
-    private fun showErrorDialog() {
-        Toast.makeText(this, "Failed to load data", Toast.LENGTH_SHORT).show()
+    private fun initEntry() {
+        lifecycleScope.launch {
+            entryListAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect {
+                    val snapShot = entryListAdapter.snapshot()
+                    Log.e(TAG, "no. if items: ${snapShot.items.size}")
+                    if (snapShot.items.isNotEmpty()) binding.entryRecyclerView.scrollToPosition(0)
+                }
+        }
     }
 }
