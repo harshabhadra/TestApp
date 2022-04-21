@@ -37,7 +37,7 @@ class Repository(
                 } else {
                     Log.e(
                         TAG,
-                        "entries response unsuccessful: ${response.errorBody()?.string()}"
+                        "entries response unsuccessful"
                     )
                 }
             } catch (e: Exception) {

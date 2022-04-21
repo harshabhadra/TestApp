@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
-import com.harshabhadra.testapp.utils.ConstUtils
 
 
 class CheckPermission(private val context: Activity) {

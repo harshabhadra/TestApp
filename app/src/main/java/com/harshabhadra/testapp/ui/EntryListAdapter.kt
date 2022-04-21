@@ -4,11 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.harshabhadra.testapp.database.DbEntry
 import com.harshabhadra.testapp.databinding.EntryListItemBinding
-import com.harshabhadra.testapp.network.Entry
 
 class EntryListAdapter :
     PagingDataAdapter<DbEntry, EntryListAdapter.EntryListViewHolder>(EntryListDiffUtilCallBack()) {

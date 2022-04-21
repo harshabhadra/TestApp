@@ -8,7 +8,7 @@ import com.harshabhadra.testapp.utils.SessionManager
 
 class MyApplication : Application() {
 
-    lateinit var apiService: ApiService
+    private lateinit var apiService: ApiService
 
     override fun onCreate() {
         super.onCreate()
@@ -17,7 +17,7 @@ class MyApplication : Application() {
     }
 
     companion object {
-        var sessionManager: SessionManager? = null
+        private var sessionManager: SessionManager? = null
         fun session(context: Context): SessionManager {
             if (sessionManager == null)
                 sessionManager = SessionManager(context)
